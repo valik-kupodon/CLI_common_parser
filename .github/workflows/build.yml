@@ -1,0 +1,40 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        rust-version: [stable]
+
+    steps:
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          override-arch: true
+
+      - name: Install Clippy
+        run: rustup component add clippy-preview --toolchain ${{ matrix.rust-version }}
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Build Debug
+        run: cargo build --verbose
+
+      - name: Build Release
+        run: cargo build --verbose --release
+
+      - name: Run Tests
+        run: cargo test --verbose
+
+      - name: Clippy Check
+        run: cargo clippy --verbose -- -D warnings
