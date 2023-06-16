@@ -1,5 +1,5 @@
 [package]
-name = "CLI_common_parser"
+name = "cli_common_parser"
 version = "0.1.0"
 edition = "2021"
 
