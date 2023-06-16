@@ -1,0 +1,42 @@
+use clap::{Arg, ArgMatches, Command};
+
+pub fn register_args() -> ArgMatches {
+    Command::new("CLI common string worker")
+        .version("1.0")
+        .author("valentinefilatov2015@gmail.com")
+        .about("Work with strings")
+        .subcommand(
+            Command::new("run")
+                .about("Get tyept of conversion and string conversion")
+                .arg(
+                    Arg::new("command_type")
+                        .help("Type of string conversion: quote_words")
+                        .value_parser(clap::builder::PossibleValuesParser::new(["quote_words"]))
+                        .required(true)
+                        .index(1),
+                )
+                .arg(
+                    Arg::new("string")
+                        .help("String, that need to convert")
+                        .required(true)
+                        .index(2),
+                ),
+        )
+        .get_matches()
+}
+
+pub fn get_command_type_and_string_args(sub_m: &ArgMatches) -> (String, String) {
+    let packages: Vec<_> = sub_m
+        .get_many::<String>("command_type")
+        .expect("contains_id")
+        .map(|s| s.as_str())
+        .collect();
+    let command_type = packages.join(", ");
+    let packages: Vec<_> = sub_m
+        .get_many::<String>("string")
+        .expect("contains_id")
+        .map(|s| s.as_str())
+        .collect();
+    let string = packages.join(", ");
+    (command_type, string)
+}
