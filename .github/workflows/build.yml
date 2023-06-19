@@ -27,6 +27,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Rust formating
+        run: cargo fmt
+
       - name: Build Debug
         run: cargo build --verbose
 

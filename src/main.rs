@@ -1,7 +1,8 @@
-use std::time::Instant;
 use crate::command_line_interface::get_command_type_and_string_args;
+use std::time::Instant;
 
 mod command_line_interface;
+mod string_converter;
 
 fn main() {
     let start = Instant::now();

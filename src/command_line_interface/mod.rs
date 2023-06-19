@@ -7,7 +7,7 @@ pub fn register_args() -> ArgMatches {
         .about("Work with strings")
         .subcommand(
             Command::new("run")
-                .about("Get tyept of conversion and string conversion")
+                .about("Get type of conversion and string conversion")
                 .arg(
                     Arg::new("command_type")
                         .help("Type of string conversion: quote_words")
