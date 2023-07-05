@@ -21,7 +21,7 @@ fn main() {
             let parsed_number = FileGenerator::get_repeat_times(repeat_times);
             if let Ok(parsed_number) = parsed_number {
                 println!("{file_path}, {parsed_number}, {text}");
-                FileGenerator::generate_file(FileGenerator{}, file_path.as_str(), parsed_number, text);
+                FileGenerator::generate_file(file_path.as_str(), parsed_number, text);
             } else {
                 println!("{:?}", parsed_number);
             }
