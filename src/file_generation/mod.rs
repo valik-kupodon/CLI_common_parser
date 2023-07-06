@@ -46,9 +46,9 @@ impl ThreadFileGeneration {
 
         for i in 0..4 {
             let sender = sender.clone();
-            let mut repeating_times = first_three_threads.clone();
+            let mut repeating_times = first_three_threads;
             if i == 4 {
-                repeating_times = fourth_thread.clone();
+                repeating_times = fourth_thread;
             }
             let text_copy = text.clone();
             thread::spawn(move || {
