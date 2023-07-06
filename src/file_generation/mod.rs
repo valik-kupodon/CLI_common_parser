@@ -10,18 +10,23 @@ impl FileGenerator{
         Ok(parsed_number)
     }
     pub fn generate_file(file_path: &str, repeating_number: usize, text: String) {
+        let mut content:Vec<&str> = Vec::new();
+        for _i in 0..repeating_number {
+            content.push(text.as_str())
+        }
         let mut file = OpenOptions::new()
             .append(true)
             .create(true)
             .open(file_path)
             .expect("Failed to open the file");
-        for _i in 0..repeating_number {
-            if let Err(err) = file.write_all(text.as_bytes()) {
-                eprintln!("Failed to append to file: {}", err);
-            } else {
-                println!("Successfully appended to file {file_path}.");
+
+        let content_str = content.join("");
+
+        if let Err(err) = file.write_all(content_str.as_bytes()) {
+            eprintln!("Failed to append to file: {}", err);
+        } else {
+            println!("Successfully appended to file {file_path}.");
             }
-        }
     }
 
 }
