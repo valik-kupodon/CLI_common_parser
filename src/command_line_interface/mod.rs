@@ -26,10 +26,10 @@ pub fn register_args() -> ArgMatches {
             Command::new("generate_file")
                 .about("Generate file from sample text in provided directory")
                 .arg(
-                Arg::new("file_path")
-                    .help("Path to file")
-                    .required(true)
-                    .index(1),
+                    Arg::new("file_path")
+                        .help("Path to file")
+                        .required(true)
+                        .index(1),
                 )
                 .arg(
                     Arg::new("repeat_times")
@@ -42,7 +42,7 @@ pub fn register_args() -> ArgMatches {
                         .help("String that will be written into the file")
                         .required(true)
                         .index(3),
-                )
+                ),
         )
         .get_matches()
 }
@@ -63,7 +63,7 @@ pub fn get_command_type_and_string_args(sub_m: &ArgMatches) -> (String, String) 
     (command_type, string)
 }
 
-pub fn get_file_path_text_and_numer_of_repetition(sub_m: &ArgMatches) -> (String, String, String){
+pub fn get_file_path_text_and_numer_of_repetition(sub_m: &ArgMatches) -> (String, String, String) {
     let packages: Vec<_> = sub_m
         .get_many::<String>("file_path")
         .expect("contains_id")
@@ -82,6 +82,6 @@ pub fn get_file_path_text_and_numer_of_repetition(sub_m: &ArgMatches) -> (String
         .map(|s| s.as_str())
         .collect();
     let text = packages.join(", ");
-    
+
     (file_path, repeat_times, text)
 }

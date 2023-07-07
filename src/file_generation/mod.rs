@@ -4,10 +4,10 @@ use std::num::ParseIntError;
 use std::sync::mpsc;
 use std::thread;
 
-pub struct FileGenerator{}
+pub struct FileGenerator {}
 
-impl FileGenerator{
-    pub fn get_repeat_times(repeat_times: String) -> Result<usize, ParseIntError>{
+impl FileGenerator {
+    pub fn get_repeat_times(repeat_times: String) -> Result<usize, ParseIntError> {
         let parsed_number = repeat_times.parse()?;
         Ok(parsed_number)
     }
@@ -15,7 +15,7 @@ impl FileGenerator{
         text.repeat(repeating_number)
     }
 
-    pub fn write_to_file(file_path: &str, content: String){
+    pub fn write_to_file(file_path: &str, content: String) {
         let mut file = OpenOptions::new()
             .append(true)
             .create(true)
@@ -28,15 +28,15 @@ impl FileGenerator{
             println!("Successfully appended to file {file_path}.");
         }
     }
-
 }
 #[derive(Clone, Copy)]
-pub struct ThreadFileGeneration{}
+pub struct ThreadFileGeneration {}
 
 impl ThreadFileGeneration {
     pub fn write_file_in_threads(self, repeating_number: usize, text: String, file_path: &str) {
         let (sender, receiver) = mpsc::channel();
-        let (first_three_threads, fourth_thread) = self.get_repeating_number_for_threads(&repeating_number);
+        let (first_three_threads, fourth_thread) =
+            self.get_repeating_number_for_threads(&repeating_number);
 
         for i in 0..8 {
             let sender = sender.clone();
@@ -49,9 +49,7 @@ impl ThreadFileGeneration {
                 let content = FileGenerator::generate_file(repeating_times, text_copy);
                 sender.send(content).unwrap();
                 println!("Thread {i}, send");
-            }
-            );
-
+            });
         }
         for vector in receiver.iter().take(8) {
             FileGenerator::write_to_file(file_path, vector)
@@ -66,7 +64,6 @@ impl ThreadFileGeneration {
         (first_three_threads, fourth_thread)
     }
 }
-
 
 #[cfg(test)]
 mod test {
