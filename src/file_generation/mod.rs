@@ -11,24 +11,18 @@ impl FileGenerator{
         let parsed_number = repeat_times.parse()?;
         Ok(parsed_number)
     }
-    pub fn generate_file(repeating_number: usize, text: String) -> Vec<String> {
-        let mut content:Vec<String> = Vec::new();
-        for _i in 0..repeating_number {
-            content.push(text.clone())
-        }
-        content
+    pub fn generate_file(repeating_number: usize, text: String) -> String {
+        text.repeat(repeating_number)
     }
 
-    pub fn write_to_file(file_path: &str, content: Vec<String>){
+    pub fn write_to_file(file_path: &str, content: String){
         let mut file = OpenOptions::new()
             .append(true)
             .create(true)
             .open(file_path)
             .expect("Failed to open the file");
 
-        let content_str = content.join("");
-
-        if let Err(err) = file.write_all(content_str.as_bytes()) {
+        if let Err(err) = file.write_all(content.as_bytes()) {
             eprintln!("Failed to append to file: {}", err);
         } else {
             println!("Successfully appended to file {file_path}.");
@@ -44,7 +38,7 @@ impl ThreadFileGeneration {
         let (sender, receiver) = mpsc::channel();
         let (first_three_threads, fourth_thread) = self.get_repeating_number_for_threads(&repeating_number);
 
-        for i in 0..4 {
+        for i in 0..8 {
             let sender = sender.clone();
             let mut repeating_times = first_three_threads;
             if i == 4 {
@@ -59,15 +53,15 @@ impl ThreadFileGeneration {
             );
 
         }
-        for vector in receiver.iter().take(4) {
+        for vector in receiver.iter().take(8) {
             FileGenerator::write_to_file(file_path, vector)
         }
     }
 
     fn get_repeating_number_for_threads(self, repeating_number: &usize) -> (usize, usize) {
-        let first_three_threads = repeating_number / 4;
+        let first_three_threads = repeating_number / 6;
         println!("{first_three_threads}, {repeating_number}");
-        let fourth_thread = repeating_number - (&first_three_threads * 3);
+        let fourth_thread = repeating_number - (&first_three_threads * 5);
         println!("{fourth_thread}");
         (first_three_threads, fourth_thread)
     }
@@ -76,8 +70,6 @@ impl ThreadFileGeneration {
 
 #[cfg(test)]
 mod test {
-    // use std::fs::{File, remove_file};
-    // use std::io::Read;
     use super::*;
 
     #[test]
@@ -98,21 +90,12 @@ mod test {
         assert!(repeat_times.is_err());
     }
 
-    // const FILE_PATH: &str = "test_file.txt";
-
-    // #[test]
-    // fn test_generate_file() {
-    //     let repeating_number = 3;
-    //     let text = "Hello, World!";
-    //     FileGenerator::generate_file(FILE_PATH, repeating_number, text.to_string());
-    //
-    //     let mut file = File::open(FILE_PATH).expect("Failed to open the file");
-    //     let mut file_content = String::new();
-    //     file.read_to_string(&mut file_content)
-    //         .expect("Failed to read file content");
-    //
-    //     let expected_content = format!("{text}{text}{text}");
-    //     assert_eq!(file_content, expected_content);
-    //     let _ = remove_file(FILE_PATH);
-    // }
+    #[test]
+    fn test_generate_file() {
+        let repeating_number = 3;
+        let text = "Hello, World!";
+        let file_content = FileGenerator::generate_file(repeating_number, text.to_owned());
+        let expected_content = format!("{text}{text}{text}");
+        assert_eq!(file_content, expected_content);
+    }
 }
