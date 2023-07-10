@@ -4,6 +4,7 @@ use std::num::ParseIntError;
 use std::sync::mpsc;
 use std::thread;
 
+#[derive(Debug)]
 pub struct FileGenerator {}
 
 impl FileGenerator {
@@ -23,7 +24,7 @@ impl FileGenerator {
             .expect("Failed to open the file");
 
         if let Err(err) = file.write_all(content.as_bytes()) {
-            eprintln!("Failed to append to file: {}", err);
+            eprintln!("Failed to append to file: {:?}", err);
         } else {
             println!("Successfully appended to file {file_path}.");
         }
